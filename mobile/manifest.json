@@ -1,0 +1,12 @@
+{
+  "name": "ROBIN AI",
+  "short_name": "ROBIN",
+  "description": "Shaxsiy raqamli hamroh — boshqaruv va monitoring",
+  "start_url": "/#home",
+  "display": "standalone",
+  "background_color": "#0d121c",
+  "theme_color": "#2f8fff",
+  "icons": [
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%232f8fff'/%3E%3Ccircle cx='190' cy='240' r='42' fill='white'/%3E%3Ccircle cx='322' cy='240' r='42' fill='white'/%3E%3Crect x='180' y='330' width='152' height='24' rx='12' fill='white'/%3E%3C/svg%3E", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROBIN — Mijoz paneli</title>
+  <meta name="theme-color" content="#6d5dfc">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%236d5dfc%27/%3E%3Ccircle cx=%2722%27 cy=%2730%27 r=%276%27 fill=%27white%27/%3E%3Ccircle cx=%2742%27 cy=%2730%27 r=%276%27 fill=%27white%27/%3E%3Crect x=%2220%27 y=%2742%27 width=%2724%27 height=%274%27 rx=%272%27 fill=%27white%27/%3E%3C/svg%3E">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/panel.css">
+</head>
+<body>
+  <section id="login" style="display:none">
+    <div class="card">
+      <div class="logo"><span class="dot">R</span> <span class="pTitle">ROBIN</span></div>
+      <p class="muted">Mijoz paneliga kirish</p>
+      <form id="authForm">
+        <label>Login</label><input name="username" autocomplete="username" required>
+        <label>Parol</label><input name="password" type="password" autocomplete="current-password" required minlength="8">
+        <div style="height:14px"></div>
+        <button class="primary" style="width:100%">Kirish</button>
+        <p id="authErr" class="small" style="color:var(--err)"></p>
+      </form>
+    </div>
+  </section>
+
+  <section id="panel" style="display:none">
+    <header class="cp-top">
+      <div class="logo"><span class="dot">R</span> <span class="pTitle">ROBIN</span></div>
+      <div class="grow"></div>
+      <span class="badge" id="usage">—</span>
+      <span class="small muted" id="who"></span>
+      <a class="small" href="/?full=1" id="fullLink">To'liq dashboard</a>
+      <a class="small" href="#" id="logout">Chiqish</a>
+    </header>
+    <main class="cp-main">
+      <div class="card cp-hello"><h1 id="hello">Salom!</h1><p class="muted" id="welcome"></p></div>
+      <h3 class="cp-h">⚡ Tayyor buyruqlar</h3>
+      <div class="cp-cmds" id="cmds"></div>
+      <div class="card cp-chat">
+        <div class="row"><h3 class="grow" style="margin:0">💬 ROBIN bilan suhbat</h3><button class="small ghost" id="newChat">🆕 Yangi suhbat</button></div>
+        <div id="msgs" class="cp-msgs"></div>
+        <form id="sendForm" class="cp-send">
+          <textarea id="txt" rows="2" placeholder="Savolingizni yozing… (Enter — yuborish, Shift+Enter — yangi qator)"></textarea>
+          <button class="primary" id="sendBtn">Yuborish</button>
+        </form>
+      </div>
+    </main>
+  </section>
+  <div id="toasts"></div>
+  <script src="/static/panel.js"></script>
+</body>
+</html>

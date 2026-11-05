@@ -1,0 +1,23 @@
+/* Mijoz paneli (/panel) — simple customer dashboard on top of styles.css tokens. */
+#login { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; }
+#login .card { width: min(420px, 100%); }
+.cp-top { display: flex; align-items: center; gap: 12px; padding: 12px 20px; flex-wrap: wrap;
+  background: var(--panel); backdrop-filter: var(--blur); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+.cp-top .grow { flex: 1; }
+.cp-main { max-width: 980px; margin: 0 auto; padding: 18px 16px 40px; display: flex; flex-direction: column; gap: 14px; }
+.cp-hello h1 { margin: 0 0 4px; font-size: 24px; }
+.cp-h { margin: 6px 2px 0; }
+.cp-cmds { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.cp-cmd { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; text-align: left;
+  border-radius: var(--radius-sm); border: 1px solid var(--line2); background: var(--panel); cursor: pointer; color: var(--text);
+  font: inherit; transition: transform .15s, box-shadow .15s; min-height: 84px; }
+.cp-cmd:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.cp-cmd .ic { font-size: 24px; }
+.cp-cmd b { font-size: 14px; }
+.cp-msgs { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; max-height: 58vh; overflow: auto; min-height: 120px; }
+.cp-msg { max-width: 86%; padding: 10px 14px; border-radius: 14px; background: var(--panel2); word-wrap: break-word; }
+.cp-msg.me { align-self: flex-end; background: var(--brand); color: #fff; white-space: pre-wrap; }
+.cp-msg.wait { opacity: .7; font-style: italic; }
+.cp-send { display: flex; gap: 8px; align-items: flex-end; }
+.cp-send textarea { flex: 1; resize: vertical; }
+@media (max-width: 560px) { .cp-top { padding: 10px 16px; } .cp-msg { max-width: 100%; } .cp-send { flex-direction: column; align-items: stretch; } }

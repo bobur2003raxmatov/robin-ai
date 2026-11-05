@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROBIN AI</title>
+  <meta name="theme-color" content="#6d5dfc">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%236d5dfc%27/%3E%3Ccircle cx=%2722%27 cy=%2730%27 r=%276%27 fill=%27white%27/%3E%3Ccircle cx=%2742%27 cy=%2730%27 r=%276%27 fill=%27white%27/%3E%3Crect x=%2220%27 y=%2742%27 width=%2724%27 height=%274%27 rx=%272%27 fill=%27white%27/%3E%3C/svg%3E">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <!-- LOGIN -->
+  <section id="login">
+    <div class="card">
+      <div class="logo"><span class="dot">R</span> ROBIN</div>
+      <p class="muted">Shaxsiy raqamli hamroh, kompyuter boshqaruvchisi va mustaqil AI agent.</p>
+      <div class="tabs"><button class="active" data-mode="login">Kirish</button><button data-mode="register">Ro'yxatdan o'tish</button></div>
+      <form id="authForm">
+        <label>Login</label><input name="username" autocomplete="username" required>
+        <div id="regFields" style="display:none"><label>Ism</label><input name="full_name"></div>
+        <label>Parol</label><input name="password" type="password" autocomplete="current-password" required minlength="8">
+        <div style="height:14px"></div>
+        <button class="primary" style="width:100%">Davom etish</button>
+        <p id="authErr" class="small" style="color:var(--err)"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="app">
+    <aside id="side">
+      <div class="logo"><span class="dot">R</span> ROBIN</div>
+      <nav id="nav"></nav>
+      <div style="flex:1"></div>
+      <div class="small muted" style="padding:8px 12px" id="whoami"></div>
+      <a href="#" id="logout" class="small" style="padding:4px 12px">Chiqish</a>
+    </aside>
+    <main>
+      <header>
+        <button id="menuBtn" class="ghost small">☰</button>
+        <div class="title" id="pageTitle">Home</div>
+        <span id="devStatus" class="badge">—</span>
+        <button class="ghost small claude-icon" id="claudeBtn" style="display:none" title="Claude">🤖</button>
+        <button class="ghost small bell" id="bellBtn">🔔<span class="n" id="bellN" style="display:none">0</span></button>
+        <button class="stop-btn small" id="stopBtn" title="Barcha agentlarni darhol to'xtatish">⛔ STOP</button>
+      </header>
+      <div id="view"></div>
+    </main>
+  </section>
+  <div id="toasts"></div>
+  <script src="/static/avatar.js"></script>
+  <script src="/static/voice.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

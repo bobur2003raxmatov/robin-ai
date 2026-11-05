@@ -1,0 +1,14 @@
+services:
+  robin:
+    build: .
+    restart: always
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      DEPLOY_RESTART: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./database:/app/database     # DB, audio, zaxiralar konteyner yangilanganda saqlanadi
+      - ./notes:/app/notes
+      - ./.git:/app/.git             # webhook git pull uchun

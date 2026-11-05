@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROBIN Widget</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root { --bubble: rgba(21, 28, 42, .92); --text: #e7ecf5; }
+    html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; font-family: "Segoe UI", system-ui, sans-serif; color: var(--text); }
+    #av { position: absolute; inset: 0; cursor: pointer; }
+    #bubble { position: absolute; left: 6px; right: 6px; top: 6px; background: var(--bubble); border-radius: 12px; padding: 8px 10px;
+      font-size: 12px; line-height: 1.4; max-height: 45%; overflow: auto; display: none; }
+    #ring { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 11px; background: var(--bubble);
+      padding: 2px 8px; border-radius: 99px; }
+    #input { position: absolute; bottom: 28px; left: 6px; right: 6px; display: none; }
+    #input input { width: 100%; box-sizing: border-box; border-radius: 10px; border: 0; padding: 7px 10px; background: var(--bubble); color: var(--text); }
+  </style>
+</head>
+<body>
+  <div id="av" title="Bosing — gapiring · O'ng tugma — yozish"></div>
+  <div id="bubble"></div>
+  <div id="input"><input id="txt" placeholder="ROBIN'ga yozing… (Enter)"></div>
+  <div id="ring">ROBIN</div>
+  <script src="/static/avatar.js"></script>
+  <script src="/static/voice.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token") || localStorage.getItem("robin_token") || "";
+    if (params.get("token")) localStorage.setItem("robin_token", token);
+    const H = { Authorization: "Bearer " + token, "Content-Type": "application/json" };
+    let conv = null, settings = { voice: { tts_engine: "edge" }, avatar: {} };
+    const bubble = document.getElementById("bubble"), ring = document.getElementById("ring");
+    const say = (t, ms = 9000) => { bubble.textContent = t; bubble.style.display = "block"; clearTimeout(say._t); say._t = setTimeout(() => bubble.style.display = "none", ms); };
+    let avatar;
+    fetch("/api/settings", { headers: H }).then((r) => r.json()).then((s) => { if (s.avatar) { settings = s; try { voice.configure(s.voice || {}); } catch (_) {} }
+      avatar = new RobinAvatar(document.getElementById("av"), { color: settings.avatar.color, accent: settings.avatar.accent, compact: true, eyeTracking: true });
+    }).catch(() => { avatar = new RobinAvatar(document.getElementById("av"), { compact: true }); });
+
+    async function ask(text) {
+      if (!text) return;
+      ring.textContent = "🤔 o'ylayapman…"; avatar && avatar.setState("thinking");
+      const r = await fetch("/api/chat", { method: "POST", headers: H, body: JSON.stringify({ text, conversation_id: conv, voice: true }) });
+      const j = await r.json(); conv = j.conversation_id || conv;
+      say(j.reply || j.detail || "…"); ring.textContent = "ROBIN";
+      voice.speak(j.reply, avatar, settings.voice.tts_engine);
+    }
+    const voice = new RobinVoice({ getToken: () => token, onFinal: (t) => { say("🎤 " + t, 4000); voice.stop(); ask(t); },
+      onInterim: (t) => say("🎤 " + t, 3000), onState: (s) => { avatar && avatar.setState(s); ring.textContent = s === "listening" ? "🎙️ tinglayapman…" : "ROBIN"; } });
+    voice.configure(settings.voice || {});
+    document.getElementById("av").onclick = () => voice.listening ? voice.stop() : voice.start(false);
+    document.getElementById("av").oncontextmenu = (e) => { e.preventDefault(); const box = document.getElementById("input"); box.style.display = box.style.display === "block" ? "none" : "block"; document.getElementById("txt").focus(); };
+    document.getElementById("txt").onkeydown = (e) => { if (e.key === "Enter") { ask(e.target.value.trim()); e.target.value = ""; document.getElementById("input").style.display = "none"; } };
+
+    (function connect() {
+      const ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws?token=" + token);
+      ws.onmessage = (e) => { const m = JSON.parse(e.data);
+        if (m.type === "avatar" && avatar) { avatar.setState(m.state); if (m.state === "working") ring.textContent = "⚙️ " + (m.text || "ishlayapman"); }
+        if (m.type === "notification") { say("🔔 " + m.title + (m.body ? "\n" + m.body : "")); if (m.level === "warning" || m.level === "error") voice.speak(m.title, avatar, settings.voice.tts_engine); }
+        if (m.type === "approval_request") say("⚠️ Tasdiq kerak: " + m.tool + " — Dashboard yoki Telegram'da tasdiqlang", 20000);
+      };
+      ws.onclose = () => setTimeout(connect, 3000);
+    })();
+  </script>
+</body>
+</html>

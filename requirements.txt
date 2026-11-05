@@ -1,0 +1,47 @@
+# ===== ROBIN — Core server =====
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pydantic-settings>=2.3
+sqlalchemy[asyncio]>=2.0.30
+greenlet>=3.0
+aiosqlite>=0.20
+# asyncpg>=0.29          # PostgreSQL uchun (DATABASE_URL=postgresql+asyncpg://...)
+# pgvector>=0.3          # PostgreSQL + pgvector semantik qidiruv uchun
+httpx>=0.27
+websockets>=12            # desktop agent ↔ server
+PyJWT>=2.8
+bcrypt>=4.1
+python-multipart>=0.0.9
+cryptography>=42
+
+# ===== Data / Excel / Trading =====
+pandas>=2.2
+numpy>=1.26
+openpyxl>=3.1
+
+# ===== Documents (Knowledge Center) =====
+pypdf>=4.2
+python-docx>=1.1
+
+# ===== System & computer control =====
+psutil>=5.9
+pyautogui>=0.9.54
+pyperclip>=1.8
+pynput>=1.7
+Pillow>=10.3
+
+# ===== Voice =====
+edge-tts>=6.1            # o'zbek (uz-UZ-SardorNeural / MadinaNeural), rus, ingliz ovozlari
+
+# ===== Integrations =====
+aiogram>=3.7             # Telegram boshqaruvi
+
+# ===== Desktop widget =====
+pywebview>=5.1
+qrcode>=7.4              # Download App sahifasidagi QR kodlar
+
+# ===== Tests =====
+pytest>=8.2
+pytest-asyncio>=0.23
+playwright>=1.45         # tests/ui_smoke.py — tizimdagi Edge/Chrome bilan brauzer testi

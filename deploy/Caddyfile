@@ -1,0 +1,4 @@
+# HTTPS reverse proxy (Let's Encrypt avtomatik). robin.example.com ni o'z domeningizga almashtiring.
+robin.example.com {
+	reverse_proxy 127.0.0.1:8000
+}
