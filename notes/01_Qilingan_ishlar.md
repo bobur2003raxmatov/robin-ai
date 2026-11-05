@@ -86,3 +86,11 @@ Bu faylda ROBIN ustida qilingan barcha ishlar sanasi bilan yoziladi. Har bir yan
 - **Parolsiz ulanish:** Dashboard → Download App → "📱 Telefonni ulash" QR (5 daqiqa, bir martalik) → ilova skanerlaydi → `/api/mobile/pair` 30 kunlik token beradi, telefon Qurilmalar ro'yxatiga yoziladi.
 - **APK tarqatish:** `/download/ROBIN.apk` + Download App sahifasida yuklash tugmasi va QR. Qayta yig'ish: `mobile\robin_app\build_apk.bat`.
 - **Testlar:** backend 43 ta test o'tdi (QR juftlash testi qo'shildi), Flutter analyze — xato yo'q, Flutter unit test o'tdi.
+
+## 2026-11-05 — 11-bosqich: 🌐 Doimiy hosting — PythonAnywhere
+- **Manzil:** https://bobur111raxmatov.pythonanywhere.com (FastAPI/ASGI, bepul tarif). Eski "Dusel hisobot boti + Game adminka" sayti egasining roziligi bilan o'chirildi, fayllari diskda qoldi. Sayt sozlamalarining zaxirasi: `database/backups/pa_eski_sayt/`.
+- **Kod:** GitHub `bobur2003raxmatov/robin-ai` (private) ga push qilindi. Serverda `~/robin` papkasida turibdi, sayt buyrug'i `start.sh` (proxy + uvicorn).
+- **Baza ko'chirildi:** foydalanuvchi, sozlamalar, shifrlangan AI kalitlari va qaydlar ko'chirildi. SECRET_KEY bir xil, shuning uchun kalitlar serverda ham ochiladi.
+- **Tekshiruv (serverda):** health, /panel, login ishladi. Gemini, Groq, OpenRouter va Mistral ishlaydi (Cloudflare'ga hali ACCOUNT_ID kerak). Chat va WebSocket ishladi. Edge ovozi uchun proxy tuzatildi.
+- **Disk:** bepul tarifda 512 MB. Venv tizimdagi pandas/numpy'ni ishlatadi, shuning uchun 64 MB oladi; jami ~257 MB band.
+- **Avto-deploy:** GitHub webhook (push) → `/api/deploy/webhook` ulandi, ping 200 qaytardi. `git pull` dan keyin sayt PA API orqali qayta yuklanadi. **Kerak:** serverga GitHub'dan o'qish tokeni (fine-grained, Contents: Read).
