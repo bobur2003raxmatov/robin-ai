@@ -17,7 +17,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.agents import scheduler
 from backend.agents.executor import autopilot, log_error
-from backend.api import admin, apps, auth, chat, claude, client, deploy, notes, robin, system, trading, voice
+from backend.api import admin, apps, auth, chat, claude, client, deploy, mobile, notes, robin, system, trading, voice
 from backend.config import BASE_DIR, settings
 from backend.integrations import telegram_bot
 from backend.memory.database import init_db
@@ -89,7 +89,8 @@ async def unhandled(request: Request, exc: Exception):
 
 
 for r in (auth.router, chat.router, chat.ws_router, voice.router, robin.router, robin.device_ws, trading.router,
-          system.router, notes.router, apps.router, admin.router, claude.router, client.router, deploy.router):
+          system.router, notes.router, apps.router, admin.router, claude.router, client.router, deploy.router,
+          mobile.router):
     app.include_router(r)
 
 app.mount("/static", StaticFiles(directory=FRONTEND / "src"), name="static")

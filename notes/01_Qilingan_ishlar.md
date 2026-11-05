@@ -79,3 +79,10 @@ Bu faylda ROBIN ustida qilingan barcha ishlar sanasi bilan yoziladi. Har bir yan
 - **🚀 Hosting:** git repo yaratildi (`main`). `/api/deploy/webhook` GitHub/GitLab imzosini tekshiradi, keyin `git pull` qiladi, kerak bo'lsa `pip install` ni ishga tushiradi va serverni qayta yoqadi. Tayyorlangan fayllar: `Dockerfile`, `docker-compose.yml`, `deploy/install.sh` (systemd), `deploy/Caddyfile` (HTTPS), `deploy/README.md`. Holat Admin → Hosting bo'limida ko'rinadi.
 - **Testlar:** 42 ta test o'tdi (4 tasi yangi). Claude haqiqiy CLI bilan :8011 test serverda sinaldi: javob jonli keldi, sessiya davom etdi va xotira ishladi. Brauzer testida Claude, Mijoz paneli va Hosting bo'limlarida, shuningdek telefondagi panelda JS xatosi chiqmadi.
 
+
+## 2026-11-05 — 10-bosqich: 📱 ROBIN mobil ilovasi (Flutter)
+- **Muhit:** JDK 17 va Android SDK (platform 36, build-tools 36) o'rnatildi, Flutter Android toolchain ✅.
+- **Ilova (`mobile/robin_app`):** Chat (markdown, tayyor buyruqlar), ovozli savol → server ovozida javob, kamera bilan Live Vision, Tasdiqlar + ⛔ STOP, bildirishnomalar (WebSocket), Notes, adminlar uchun 🤖 Claude (jonli oqim), Sozlamalar. Material 3, yorug'/qorong'i mavzu, ROBIN ikonkasi.
+- **Parolsiz ulanish:** Dashboard → Download App → "📱 Telefonni ulash" QR (5 daqiqa, bir martalik) → ilova skanerlaydi → `/api/mobile/pair` 30 kunlik token beradi, telefon Qurilmalar ro'yxatiga yoziladi.
+- **APK tarqatish:** `/download/ROBIN.apk` + Download App sahifasida yuklash tugmasi va QR. Qayta yig'ish: `mobile\robin_app\build_apk.bat`.
+- **Testlar:** backend 43 ta test o'tdi (QR juftlash testi qo'shildi), Flutter analyze — xato yo'q, Flutter unit test o'tdi.

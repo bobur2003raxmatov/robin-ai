@@ -1,21 +1,29 @@
-# 📱 Eslatma: native mobil ilova — keyinroq bajaramiz
+# 📱 ROBIN mobil ilovasi (Android / iOS)
 
-**Holat:** ⏳ rejalashtirilgan (hali boshlanmagan). Bu yozuv keyingi bosqich uchun eslatma.
+**Holat:** ✅ 1-versiya tayyor (2026-11-05). Kod: `mobile/robin_app` (Flutter).
 
-## Hozir nima ishlaydi
-- **PWA:** Download App → Mobil ilova bo'limidagi QR kod. Telefonda "Bosh ekranga qo'shish" orqali ROBIN ilova kabi ochiladi.
-- **Telegram bot** orqali to'liq boshqarish ishlaydi: matn, ovoz, tasdiqlash, /stop.
-- **Shart:** telefon bitta Wi-Fi'da bo'lishi kerak. `.env` faylida `HOST=0.0.0.0` qilinadi.
+## O'rnatish (Android)
+1. Kompyuterda: Dashboard → **Download App** → "ROBIN Android ilovasi" → **⬇ ROBIN.apk** (yoki telefon bilan QR'ni skanerlang).
+2. Telefonda APK'ni oching → "Noma'lum manbalardan o'rnatish"ga ruxsat bering → O'rnatish.
+3. Ilovani oching → **"QR orqali ulanish"** → kompyuterda Download App → **📱 Telefonni ulash** bosilganda chiqqan QR'ni skanerlang. Parol kiritish shart emas.
+   - Yoki server manzili (`http://192.168.x.x:8000`), login va parol bilan kiring.
+4. Shart: telefon va kompyuter bitta Wi-Fi'da, serverda `.env` → `HOST=0.0.0.0`. Internet orqali — HTTPS domen (hostingdan keyin).
 
-## Keyingi bosqichda qilinadigan ishlar
-1. **Texnologiya tanlash:** Flutter (tavsiya) yoki React Native. Bitta kod bilan Android va iOS.
-2. **Ekranlar:** Login, Chat (ovoz bilan), Autopilot, Approval Center, Notes, Trading kuzatuvi, Settings.
-3. **Push bildirishnomalar** (Firebase Cloud Messaging / APNs): tasdiq so'rovlari, eslatmalar, vazifa natijalari.
-4. **Ovoz:** "Hey ROBIN" uyg'otish so'zi, telefon vidjeti va tezkor buyruq.
-5. **Live Vision:** telefon kamerasini Excel jadval, grafik yoki hujjatga qaratib, ROBIN'ga tahlil qildirish.
-6. **Xavfsiz ulanish:** uydan tashqarida ishlashi uchun HTTPS (Cloudflare Tunnel yoki domen + sertifikat).
-7. **QR orqali juftlash:** kompyuterdagi ROBIN bilan telefonni bir skanerlash bilan bog'lash.
-8. **Nashr qilish:** Google Play (APK/AAB) va App Store (TestFlight → nashr).
+## Imkoniyatlar
+- 💬 **Chat**: matn, markdown javoblar, tayyor buyruqlar (Admin → Mijoz paneli'dagi tugmalar).
+- 🎤 **Ovoz**: mikrofon → matn (uz/ru/en) → ROBIN → javob server ovozida (Edge TTS) o'qiladi. Xabarni uzoq bosish — qayta o'qish.
+- 📷 **Live Vision**: kamera bilan rasm olib tahlil qildirish (Excel, grafik, hujjat).
+- ✅ **Tasdiqlar**: ROBIN xavfli amaldan oldin so'raydi — telefondan Ruxsat / Rad; ⛔ STOP tugmasi.
+- 🔔 **Bildirishnomalar**: ilova ochiq (yoki fonda) turganda tasdiq so'rovlari va xabarlar.
+- 📝 **Notes**: barcha qaydlar va yo'riqnomalar, yangi qayd qo'shish.
+- 🤖 **Claude** (faqat admin): ikonkani yoqish/o'chirish va vazifa berish, natija jonli.
+- ⚙️ Sozlamalar: hisob, server, bugungi limit, javoblarni avtomatik o'qish, chiqish.
 
-## Eslatma
-iOS cheklovlari sabab telefon kompyuterdagi kabi barcha tizim amallarini mustaqil bajara olmaydi. Mobil ilova asosan **boshqarish, tasdiqlash va monitoring** uchun bo'ladi.
+## Yangilash (admin)
+`mobile\robin_app\build_apk.bat` — APK'ni qayta yig'adi va `database\apps\ROBIN.apk` ga joylaydi (Download App sahifasida darhol ko'rinadi).
+
+## Keyingi qadamlar
+- Firebase push (ilova yopiq bo'lsa ham bildirishnoma) — Firebase loyihasi kerak.
+- iOS: Mac + Xcode orqali yig'ish va TestFlight.
+- Google Play: imzo kaliti (keystore) va do'kon sahifasi.
+- "Hey ROBIN" uyg'otish so'zi va bosh ekran vidjeti.

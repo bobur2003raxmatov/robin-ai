@@ -116,3 +116,18 @@ def test_deploy_webhook_signature(client, monkeypatch):
     body2 = b'{"ref": "refs/heads/dev"}'
     sig2 = "sha256=" + hmac.new(b"s3cret", body2, hashlib.sha256).hexdigest()
     assert "skipped" in client.post("/api/deploy/webhook", content=body2, headers={"X-Hub-Signature-256": sig2}).json()
+
+
+def test_mobile_pairing(client):
+    import json as _json
+    h, u = _reg(client, "mobuser")
+    r = client.post("/api/mobile/pair-code", json={"server": "http://10.0.0.5:8000"}, headers=h).json()
+    p = _json.loads(r["payload"])
+    assert p == {"robin": 1, "server": "http://10.0.0.5:8000", "code": r["code"]} and "<svg" in r["qr"]
+    assert client.post("/api/mobile/pair", json={"code": "wrong"}).status_code == 401
+    ok = client.post("/api/mobile/pair", json={"code": r["code"], "device_name": "Pixel"}).json()
+    assert ok["user"]["username"] == "mobuser"
+    me = client.get("/api/auth/me", headers={"Authorization": "Bearer " + ok["token"]})
+    assert me.status_code == 200
+    assert client.post("/api/mobile/pair", json={"code": r["code"]}).status_code == 401     # one-time
+    assert client.get("/api/mobile/info").json()["url"] == "/download/ROBIN.apk"

@@ -1127,8 +1127,18 @@ VIEWS.download = async (v) => {
         <li>iOS cheklovlari sabab telefon kompyuterdagidek tizim amallarini bajara olmaydi: u boshqaruv va monitoring uchun.</li>
         <li>Uydan tashqarida ishlatish uchun Telegram bot (Settings → Telegram) yoki HTTPS bilan internetga chiqarilgan server kerak.</li></ol></details></div>
   </div>
-  <div class="card roadmap" style="margin-top:16px"><h2>🛠️ Native mobil ilova — keyinroq bajaramiz</h2><p class="small muted">Hozir mobil versiya PWA ko'rinishida ishlaydi. Keyingi bosqich rejasi (Notes → "Mobil ilova" yozuvida ham saqlangan):</p>
-    <ul class="small"><li>Android (APK / Google Play) va iOS (App Store): Flutter yoki React Native.</li><li>Push bildirishnomalar va Approval Center uchun tezkor tugmalar.</li><li>Ovozli buyruq vidjeti va "Hey ROBIN" uyg'otish so'zi.</li><li>Uydan tashqarida ulanish uchun xavfsiz tunnel (HTTPS).</li><li>Telefon kamerasi bilan Live Vision va QR orqali kompyuterni ulash.</li></ul></div>`;
+  <div class="card dl-card" style="margin-top:16px"><div class="dl-icon">🤖</div><h2>ROBIN Android ilovasi</h2>
+    <p class="muted small">Native ilova: chat, ovozli savol va javob, kamera orqali Live Vision, tasdiqlash (Approval), bildirishnomalar, tayyor buyruqlar, adminlar uchun 🤖 Claude. Parolsiz ulanadi: ilovada <b>"QR orqali ulanish"</b> ni bosib, quyidagi QR kodni skanerlang.</p>
+    <div class="grid2"><div id="apkBox" class="center small muted">APK tekshirilmoqda…</div>
+      <div class="center"><button class="primary" id="pairBtn">📱 Telefonni ulash (QR)</button><div id="pairOut"></div></div></div></div>`;
+  api("/api/mobile/info").then((m) => { const el = $("#apkBox"); if (!el) return;
+    const url = (info.exposed ? info.lan : location.origin) + m.url;
+    el.innerHTML = m.apk ? `<a href="${m.url}"><button class="primary">⬇ ROBIN.apk (${(m.size / 1e6).toFixed(1)} MB)</button></a><div class="qr-box" style="margin-top:8px"><img alt="APK QR" style="width:180px" src="/api/apps/qr?text=${encodeURIComponent(url)}&token=${encodeURIComponent(S.token)}"></div><div class="small muted">Telefonda QR'ni skanerlab APK'ni yuklang → o'rnating ("Noma'lum manbalar"ga ruxsat bering).</div>`
+      : `<p class="small muted">APK hali yig'ilmagan. Admin: <code>mobile\robin_app\build_apk.bat</code></p>`; }).catch(() => {});
+  $("#pairBtn").onclick = guard(async () => {
+    const r = await api("/api/mobile/pair-code", { body: {} });
+    $("#pairOut").innerHTML = `<div class="qr-box">${r.qr}</div><div class="small">Server: <code>${esc(r.server)}</code> · kod: <code>${esc(r.code)}</code></div><div class="small muted">5 daqiqa amal qiladi, bir marta ishlatiladi.${r.lan_ok ? "" : " ⚠️ Telefon ulanishi uchun .env da HOST=0.0.0.0 kerak."}</div>`;
+  });
   const showLink = (r, forQr) => {
     $("#dOut").innerHTML = forQr
       ? `<div class="qr-box">${r.qr}</div><div class="small muted center">Boshqa noutbukda telefon kamerasi yoki brauzer orqali oching. Havola 30 daqiqa amal qiladi. Qurilma: <b>${esc(r.device_name)}</b></div><div class="center small"><a href="${esc(r.url)}">${esc(r.url)}</a></div>`
