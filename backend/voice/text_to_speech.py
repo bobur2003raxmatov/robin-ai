@@ -374,7 +374,7 @@ def _cleanup_audio(max_age_h: float = 48, keep: int = 400) -> None:
 async def _edge(text: str, voice: str, prm: dict) -> bytes:
     import edge_tts
     buf = bytearray()
-    comm = edge_tts.Communicate(text, voice, rate=prm["rate"], pitch=prm["pitch"], volume=prm["volume"])
+    comm = edge_tts.Communicate(text, voice, rate=prm["rate"], pitch=prm["pitch"], volume=prm["volume"], proxy=_proxy())
     async for chunk in comm.stream():
         if chunk["type"] == "audio":
             buf.extend(chunk["data"])
@@ -402,6 +402,12 @@ def prepare_text(text: str, lang: str, cfg: dict) -> str:
     if lang == "uz":
         return prepare_uz(text, cfg.get("lexicon") or {}, cfg.get("speak_numbers", True))
     return text
+
+
+def _proxy() -> str | None:
+    """edge-tts (aiohttp) ignores HTTPS_PROXY by itself — needed on hosts like PythonAnywhere free plan."""
+    import os
+    return os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy") or None
 
 
 async def synthesize(text: str, voice_cfg: dict, openai_key: str = "", lang: str | None = None) -> dict:
@@ -470,7 +476,7 @@ async def voice_catalog() -> dict:
                 for v in vs] for lg, vs in EDGE_VOICES.items()}
     try:
         import edge_tts
-        allv = await asyncio.wait_for(edge_tts.list_voices(), 8)
+        allv = await asyncio.wait_for(edge_tts.list_voices(proxy=_proxy()), 8)
         live = {"uz": [], "ru": [], "en": []}
         for v in allv:
             loc, sn = v.get("Locale", ""), v.get("ShortName", "")
