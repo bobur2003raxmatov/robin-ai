@@ -93,4 +93,6 @@ Bu faylda ROBIN ustida qilingan barcha ishlar sanasi bilan yoziladi. Har bir yan
 - **Baza ko'chirildi:** foydalanuvchi, sozlamalar, shifrlangan AI kalitlari va qaydlar ko'chirildi. SECRET_KEY bir xil, shuning uchun kalitlar serverda ham ochiladi.
 - **Tekshiruv (serverda):** health, /panel, login ishladi. Gemini, Groq, OpenRouter va Mistral ishlaydi (Cloudflare'ga hali ACCOUNT_ID kerak). Chat va WebSocket ishladi. Edge ovozi uchun proxy tuzatildi.
 - **Disk:** bepul tarifda 512 MB. Venv tizimdagi pandas/numpy'ni ishlatadi, shuning uchun 64 MB oladi; jami ~257 MB band.
-- **Avto-deploy:** GitHub webhook (push) → `/api/deploy/webhook` ulandi, ping 200 qaytardi. `git pull` dan keyin sayt PA API orqali qayta yuklanadi. **Kerak:** serverga GitHub'dan o'qish tokeni (fine-grained, Contents: Read).
+- **Avto-deploy ✅:** GitHub webhook (push) → `/api/deploy/webhook` → `git pull` → sayt PA API orqali qayta yuklanadi. Sinovdan o'tdi: push qilingandan ~1 daqiqa o'tib serverda yangi commit turdi. Repo **public**, shuning uchun token kerak emas (git tarixida sir yo'qligi tekshirildi).
+- **Ovoz:** Edge TTS serverda proxy orqali ishlaydi (uz-UZ-SardorNeural).
+- **Sayt buyrug'i:** `~/robin_seed/start.sh` — bu papkani o'chirmang (PA API buyruqni o'zgartirishga ruxsat bermaydi).
