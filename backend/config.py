@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     DEPLOY_WEBHOOK_SECRET: str = ""
     DEPLOY_BRANCH: str = "main"
     DEPLOY_RESTART: bool = False      # True on the hosting server (systemd/docker restarts the process)
+    DEPLOY_REQUIREMENTS: str = "requirements.txt"   # server: requirements-server.txt
+    # PythonAnywhere: after `git pull` the site is reloaded through the PA API (Account → API token)
+    PA_API_TOKEN: str = ""
+    PA_USERNAME: str = ""
+    PA_DOMAIN: str = ""               # default <username>.pythonanywhere.com
+    PA_HOST: str = "www.pythonanywhere.com"   # EU accounts: eu.pythonanywhere.com
 
     DATABASE_URL: str = f"sqlite+aiosqlite:///{(DATA_DIR / 'robin.db').as_posix()}"
 

@@ -53,13 +53,27 @@ def _update() -> dict:
     if before == after:
         return {"ok": True, "changed": False, "log": log}
     _, files = _git("diff", "--name-only", before, after)
-    if "requirements.txt" in files.split():
-        r = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements.txt"], cwd=BASE_DIR,
+    req = settings.DEPLOY_REQUIREMENTS
+    if {"requirements.txt", req} & set(files.split()):
+        r = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", req], cwd=BASE_DIR,
                            capture_output=True, text=True, timeout=900)
         log.append("$ pip install\n" + (r.stdout + r.stderr)[-3000:])
         if r.returncode:
             return {"ok": False, "log": log}
     return {"ok": True, "changed": True, "commit": after[:10], "log": log}
+
+
+async def pythonanywhere_reload() -> str:
+    """Ask PythonAnywhere to reload the ASGI website (the reload happens after this response is sent)."""
+    import httpx
+    domain = settings.PA_DOMAIN or f"{settings.PA_USERNAME}.pythonanywhere.com"
+    url = f"https://{settings.PA_HOST}/api/v1/user/{settings.PA_USERNAME}/websites/{domain}/reload/"
+    try:
+        async with httpx.AsyncClient(timeout=30) as c:
+            r = await c.post(url, headers={"Authorization": f"Token {settings.PA_API_TOKEN}"})
+        return f"$ PythonAnywhere reload → {r.status_code} {r.text[:200]}"
+    except httpx.HTTPError as e:
+        return f"$ PythonAnywhere reload xatosi: {e}"
 
 
 async def run_deploy(trigger: str) -> dict:
@@ -71,7 +85,10 @@ async def run_deploy(trigger: str) -> dict:
         res.update({"at": time.time(), "trigger": trigger})
         STATE["last"] = res
         if res.get("ok") and res.get("changed") and settings.DEPLOY_RESTART:
-            asyncio.get_running_loop().call_later(1.5, os._exit, 0)   # supervisor restarts us with the new code
+            if settings.PA_API_TOKEN and settings.PA_USERNAME:
+                res["log"].append(await pythonanywhere_reload())   # PythonAnywhere restarts the site itself
+            else:
+                asyncio.get_running_loop().call_later(1.5, os._exit, 0)   # supervisor restarts us with the new code
         return res
     finally:
         STATE["running"] = False
