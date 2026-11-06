@@ -93,6 +93,10 @@ for r in (auth.router, chat.router, chat.ws_router, voice.router, robin.router, 
           mobile.router):
     app.include_router(r)
 
+from backend.api import bot_admin  # noqa: E402  — @duselb1bot veb adminkasi (/bot-admin)
+
+app.include_router(bot_admin.router)
+
 app.mount("/static", StaticFiles(directory=FRONTEND / "src"), name="static")
 
 
